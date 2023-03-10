@@ -26,7 +26,7 @@ binarized = cv2.threshold(laplacian, threshold, 255, cv2.THRESH_BINARY)[1]
 cv2.imshow('Binarize with threshold Image', binarized)
 print(254 in binarized)
 
-#  (F) morphological open operation.
+# # (F) morphological open operation.
 # kernel = np.ones((3, 3), np.uint8)
 # morphological_open = cv2.morphologyEx(binarized, cv2.MORPH_OPEN, kernel)
 # cv2.imshow('Morphological Opened Image', morphological_open)
@@ -46,7 +46,6 @@ cv2.imshow('Find Contours', caliper_copy)
 # 6B Filter out large contours
 threshold = 61
 filtered_contours = [cnt for cnt in contours if cv2.contourArea(cnt) < threshold]
-# filtered_contours = [cnt for cnt in contours if len(cnt) < threshold]
 print(f"number contours after filtering out by pixel of contour: {len(filtered_contours)}")
 caliper_copy = caliper.copy()
 cv2.drawContours(image=caliper_copy, contours=filtered_contours, contourIdx=-1, color=(0,0,255), thickness=1)
@@ -58,11 +57,6 @@ cv2.imshow(f'Filter out Contours with threshold {threshold} ', caliper_copy)
 # 6C filter out the small and medium contours
 caliper_copy = caliper.copy()
 contours = filtered_contours
-# cv2.drawContours(image=caliper_copy, contours=contours[0], contourIdx=-1, color=(0,0,255), thickness=1)
-# cv2.imshow(f'sssssssss{threshold} ', caliper_copy)
-# print(cv2.pointPolygonTest(contours[0], (11, 602), False))
-
-# print(len(contours))
 # Get the height of the image
 height, width = caliper_copy.shape[:2]
 print(f'image shape {height,width}')
@@ -111,18 +105,7 @@ for i in range(1, len(contours)):
     pixel_distance.append(y2 - y1)
     bounding_boxes.append(box1)
 bounding_boxes.append(box2)
-# Find the mode of the pixel distance
-# mode = max(pixel_distance)
 print(pixel_distance)
-
-
-
-# # visualize
-# caliper_copy = caliper.copy()
-# for box in bounding_boxes:
-#     print(box)
-#     caliper_copy = cv2.rectangle(caliper_copy, box[0], box[-2], (0,255,255), 1)
-# cv2.imshow('scales of the caliper', caliper_copy)
 
 
 
@@ -130,5 +113,3 @@ print(pixel_distance)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-
-# Create class to extract calipiuer from source image

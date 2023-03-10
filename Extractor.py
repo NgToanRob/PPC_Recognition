@@ -47,26 +47,36 @@ class CaliperExtractor:
         
 
         # Find and draw contours
-        contours, hierarchy = cv2.findContours(
+        contours, _ = cv2.findContours(
             caliper, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
         # Remove large contours
         threshold = 61
-        contours = [
-            cnt for cnt in contours if cv2.contourArea(cnt) < threshold]
+        contours = [cnt for cnt in contours if cv2.contourArea(cnt) < threshold]
 
         # Filter out the small and medium contours
         contours = self._filter_small_and_medium(contours)
 
         # Filtering out inner contours
-        scaler_boxes, ppc = self._get_inner_scaler(contours)
-        # print(ppc)
+        _, ppc = self._get_inner_scaler(contours)
 
-        # self.caliper = caliper
-
-        return ppc, scaler_boxes
+        return ppc
 
     def _filter_small_and_medium(self, contours):
+        """
+        It finds the y-axis with the most contours intersecting it, and returns the
+        contours that intersect with that y-axis
+
+        This code is used to filter contours in an image. It traverses all y-axes 
+        in the image and checks if each contour intersects with the current y-axis. 
+        If it does, it adds the contour to a list of filtered contours. The code
+        then updates the maximum count and y-axis if a greater count is found 
+        and sorts the contours by their upper left corner position. 
+        Finally, it returns the filtered contours.
+
+        @param contours The contours that we want to filter.
+        @return The contours of the image.
+        """
         # Initialize the maximum count of intersecting contours and the y-axis with the maximum count
         max_count = 0
         filtered_contours = []
@@ -93,6 +103,20 @@ class CaliperExtractor:
         return filtered_contours
 
     def _get_inner_scaler(self, contours):
+        """
+        The function takes in a list of contours, and returns a list of bounding boxes
+        and the pixel to centimeter conversion factor
+
+        This code is calculating the pixel distance between two contours. It first 
+        creates two empty lists, pixel_distance and bounding_boxes. It then loops 
+        through the sorted contours to calculate the pixel distance between each one. 
+        The code then calculates the mean of the pixel distances and multiplies it
+        by 5 to get a value for pixels per centimeter (ppc). Finally, it removes 
+        any outliers from the list of pixel distances.
+        
+        @param contours the contours of the image
+        @return The bounding boxes and the pixel count per centimeter.
+        """
         # Initialize a list to store the pixel distance between adjacent contours
         pixel_distance = []
         bounding_boxes = []
@@ -113,12 +137,15 @@ class CaliperExtractor:
         return bounding_boxes, pcc
 
     def _remove_outline(self, pixel_distance):
+        '''
+        TODO: find ways to remove the error distances
+        '''
         pixel_distance = sorted(pixel_distance)
         return pixel_distance
 
+
 def rmse(src, pre):
     return np.sqrt(np.mean((src-pre)**2))
-
 
 if __name__ == '__main__':
     box = [15, 400, 30, 600]
