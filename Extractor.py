@@ -32,8 +32,8 @@ class CaliperExtractor:
                   (self.x-self.w//2):(self.x+self.w//2)]
 
         # Adding black padding by 10 px
-        caliper = cv2.copyMakeBorder(
-            caliper, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+        # caliper = cv2.copyMakeBorder(
+        #     caliper, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=[0, 0, 0])
 
         # Convert to gray scale
         caliper = cv2.cvtColor(caliper, cv2.COLOR_BGR2GRAY)
@@ -166,7 +166,7 @@ if __name__ == '__main__':
 
         src = cv2.imread(f'2mm/{filename}')
         extractor = CaliperExtractor(src, box)
-        ppc, scaler_boxes = extractor.get_PPC()
+        ppc = extractor.get_PPC()
         phyX = 1/ ppc
 
     # if not np.isnan(phyX):
@@ -184,6 +184,6 @@ if __name__ == '__main__':
     label['pre_phyX'] = pre_phyX
     print(label['pre_phyX'])
     label.to_excel('predicted.xlsx')
-    # print('RMSE: ', rmse(src_phyX, pre_phyX))
+    print('RMSE: ', rmse(src_phyX, pre_phyX))
     # print('Error predicted: ',  error_file)
 

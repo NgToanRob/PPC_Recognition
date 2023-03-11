@@ -3,12 +3,12 @@ import numpy as np
 import os
 # Figure 5
 # (A) raw image
-image = cv2.imread('2mm/1B_0001_1.png')
+image = cv2.imread('2mm/1B_0001_6.png')
 # print(image.shape)
 cv2.imshow('Raw Image', image)
 # (B) intercept of the caliper;
 caliper = image[100:700, 0:30]
-caliper = cv2.copyMakeBorder(caliper,10,10,10,10,cv2.BORDER_CONSTANT,value=[0,0,0])
+# caliper = cv2.copyMakeBorder(caliper,10,10,10,10,cv2.BORDER_CONSTANT,value=[0,0,0])
 cv2.imshow('Cropped Image', caliper)
 
 # (C) conversion to gray-scale;
